@@ -1,0 +1,42 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "error": "Error",
+    "success": "Success",
+    "loading": "Loading...",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "upgrade": "Upgrade to Premium",
+    "confirm": "Confirm",
+    "retry": "Try Again",
+    "settings": "Preferences",
+    "processing": "Processing..."
+  },
+  "settings": {
+    "title": "Preferences",
+    "language": {
+      "title": "Language",
+      "select": "Select language"
+    },
+    "age": {
+      "title": "Age Range",
+      "ranges": {
+        "under-3": "< 3 years",
+        "3-5": "3-5 years",
+        "6-9": "6-9 years",
+        "10-15": "10-15 years",
+        "16-plus": "> 16 years"
+      }
+    },
+    "errors": {
+      "selectAge": "Please select an age range",
+      "selectLanguage": "Please select your prefered language",
+      "saveFailed": "Failed to save settings"
+    }
+  }
+}

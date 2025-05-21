@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { AgeSwitcher } from '@/components/settings/AgeSwitcher';
+import { StyleSheet, View } from 'react-native';
 
 export default function AgeModal() {
   return (
     <View style={styles.container}>
-      <Text>Modal Age</Text>
+      <AgeSwitcher/>
     </View>
   );
 }

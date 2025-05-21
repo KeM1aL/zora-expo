@@ -1,3 +1,4 @@
+import { initializeI18n } from "@/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
@@ -27,6 +28,7 @@ export default function RootLayout() {
             SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
           }),
         ]);
+        await initializeI18n();
 
         const storageValues = await AsyncStorage.multiGet([
           "@zora/language",
@@ -35,12 +37,10 @@ export default function RootLayout() {
         const [, storageLanguage] = storageValues[0];
         if (storageLanguage) {
           setSelectedLanguage(storageLanguage);
-          console.log(storageLanguage);
         }
         const [, storageAge] = storageValues[1];
         if (storageAge) {
           setSelectedAge(storageAge);
-          console.log(storageAge);
         }
       } catch (e) {
         console.warn(e);

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { LanguageSwitcher } from '@/components/settings/LanguageSwitcher';
+import { StyleSheet, View } from 'react-native';
 
 export default function LanguageModal() {
   return (
     <View style={styles.container}>
-      <Text>Modal Language</Text>
+      <LanguageSwitcher/>
     </View>
   );
 }
