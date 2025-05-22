@@ -1,3 +1,4 @@
+import { UserProvider, useUser } from "@/context/UserContext";
 import { initializeI18n } from "@/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,11 +13,12 @@ export const unstable_settings = {
   initialRouteName: "index",
 };
 
-export default function RootLayout() {
+function AppInitializer() {
   const router = useRouter();
   const [appIsReady, setAppIsReady] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [selectedAge, setSelectedAge] = useState<string | null>(null);
+  const { isLoading: isUserLoading } = useUser();
 
   useEffect(() => {
     async function prepare() {
@@ -45,7 +47,6 @@ export default function RootLayout() {
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render
         setAppIsReady(true);
       }
     }
@@ -54,7 +55,7 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (appIsReady) {
+    if (appIsReady && !isUserLoading) {
       SplashScreen.hide();
       if (!selectedLanguage) {
         router.push("/settings/language", { withAnchor: true });
@@ -62,9 +63,9 @@ export default function RootLayout() {
         router.push("/settings/age", { withAnchor: true });
       }
     }
-  }, [appIsReady]);
+  }, [appIsReady, isUserLoading]);
 
-  if (!appIsReady) {
+  if (!appIsReady || isUserLoading) {
     return null;
   }
 
@@ -94,5 +95,13 @@ export default function RootLayout() {
         options={{ headerShown: false }}
       />
     </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <UserProvider>
+      <AppInitializer />
+    </UserProvider>
   );
 }
