@@ -17,6 +17,50 @@
     "settings": "Preferences",
     "processing": "Processing..."
   },
+  "creator": {
+    "speech": {
+      "tapToStart": "Tap the microphone to start",
+      "noSpeechDetected": "No speech was detected. Please try again."
+    },
+    "permissions": {
+      "title": "Permission Required",
+      "message": "Microphone and speaker permissions are required for speech recognition. Please enable them in your device settings."
+    },
+    "story": {
+      "mockText": "This is a story about a brave little toaster."
+    },
+    "error": {
+      "apiCallFailed": "API call failed"
+    },
+    "status": {
+      "processing": "Processing...",
+      "listening": "Listening... Speak now!"
+    },
+    "credits": {
+      "freeStories_one": "{{count}} more free story",
+      "freeStories_other": "{{count}} more free stories"
+    },
+    "transcription": {
+      "label": "You said:"
+    }
+  },
+  "stories": {
+    "buyNew": "Buy new stories"
+  },
+  "dashboard": {
+    "notifications": {
+      "title": "Notifications"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "profiles": {
+      "title": "Profiles"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  },
   "settings": {
     "title": "Preferences",
     "language": {

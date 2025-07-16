@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function SettingsTab() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>Tab Settings</Text>
+      <Text>{t('account.settings.title')}</Text>
     </View>
   );
 }

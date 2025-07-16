@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function AccountTab() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>Tab Account</Text>
+      <Text>{t('account.title')}</Text>
     </View>
   );
 }

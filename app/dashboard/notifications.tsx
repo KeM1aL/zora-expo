@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Notifications() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>Notifications</Text>
+      <Text>{t('dashboard.notifications.title')}</Text>
     </View>
   );
 }

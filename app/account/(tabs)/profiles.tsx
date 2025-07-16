@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function ProfilesTab() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>Tab Profiles</Text>
+      <Text>{t('account.profiles.title')}</Text>
     </View>
   );
 }

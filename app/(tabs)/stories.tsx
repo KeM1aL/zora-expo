@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import StoryModal from "../../components/StoryModal";
 
+import { useTranslation } from 'react-i18next';
+
 const initialStoriesData = [
   {
     id: '1',
@@ -55,6 +57,7 @@ const initialStoriesData = [
 ];
 
 export default function StoryDashboardTab() {
+  const { t } = useTranslation();
   const [stories, setStories] = useState(initialStoriesData);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStory, setSelectedStory] = useState<typeof initialStoriesData[0] | null>(null);
@@ -113,7 +116,7 @@ export default function StoryDashboardTab() {
         <View style={styles.plusIconContainer}>
           <AntDesign name="plus" size={30} color="black" />
         </View>
-        <Text style={styles.buyStoriesText}>Buy new stories</Text>
+        <Text style={styles.buyStoriesText}>{t('stories.buyNew')}</Text>
       </TouchableOpacity>
 
       <FlatList
