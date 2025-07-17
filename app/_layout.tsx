@@ -2,6 +2,7 @@ import { UserProvider, useUser } from "@/context/UserContext";
 import { initializeI18n } from "@/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Font from "expo-font";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -98,10 +99,14 @@ function AppInitializer() {
   );
 }
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   return (
-    <UserProvider>
-      <AppInitializer />
-    </UserProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <AppInitializer />
+      </UserProvider>
+    </QueryClientProvider>
   );
 }

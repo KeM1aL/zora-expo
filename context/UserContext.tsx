@@ -1,3 +1,6 @@
+import { AgeRange } from '@/constants/Settings';
+import { changeLanguage, getStoredLanguage, SupportedLanguage } from '@/i18n';
+import { getStoredAge, storeAge } from '@/lib/settings';
 import { supabase } from '@/lib/supabase/client';
 import { Session } from '@supabase/supabase-js';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
@@ -14,8 +17,12 @@ interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   session: Session | null;
-  isLoading: boolean
-  // Add other context values/functions as needed
+  isLoading: boolean;
+  language: SupportedLanguage | null;
+  ageRange: AgeRange | null;
+  setLanguage: (language: SupportedLanguage) => Promise<void>;
+  setAgeRange: (ageRange: AgeRange) => Promise<void>;
+  isSettingsLoading: boolean;
 }
 
 // Create the User Context
@@ -31,8 +38,33 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
   const [user, setUser] = useState<User | null>(initialUser); // Initialize with initialUser
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [language, setLanguageState] = useState<SupportedLanguage | null>(null);
+  const [ageRange, setAgeRangeState] = useState<AgeRange | null>(null);
+  const [isSettingsLoading, setIsSettingsLoading] = useState<boolean>(true);
 
-   useEffect(() => {
+  // Load settings on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      setIsSettingsLoading(true);
+      try {
+        const [storedLanguage, storedAge] = await Promise.all([
+          getStoredLanguage(),
+          getStoredAge()
+        ]);
+        setLanguageState(storedLanguage);
+        setAgeRangeState(storedAge);
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      } finally {
+        setIsSettingsLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // Handle authentication state
+  useEffect(() => {
     setIsLoading(true);
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -53,11 +85,38 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
     };
   }, []);
 
+  // Language setter function
+  const setLanguage = async (newLanguage: SupportedLanguage) => {
+    try {
+      await changeLanguage(newLanguage);
+      setLanguageState(newLanguage);
+    } catch (error) {
+      console.error('Error setting language:', error);
+      throw error;
+    }
+  };
+
+  // Age range setter function
+  const setAgeRange = async (newAgeRange: AgeRange) => {
+    try {
+      await storeAge(newAgeRange);
+      setAgeRangeState(newAgeRange);
+    } catch (error) {
+      console.error('Error setting age range:', error);
+      throw error;
+    }
+  };
+
   const contextValue: UserContextType = {
     user,
     setUser,
     session,
-    isLoading
+    isLoading,
+    language,
+    ageRange,
+    setLanguage,
+    setAgeRange,
+    isSettingsLoading
   };
 
   return (
