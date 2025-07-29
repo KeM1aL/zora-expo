@@ -1,3 +1,95 @@
 {
-  
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "error": "Erreur",
+    "success": "Succès",
+    "loading": "Chargement...",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "upgrade": "Passer à Premium",
+    "confirm": "Confirmer",
+    "retry": "Réessayer",
+    "settings": "Préférences",
+    "processing": "Traitement en cours..."
+  },
+  "tab": {
+    "create": "Parle Moi",
+    "stories": "Mes Histoires",
+    "account":  {
+      "home": "Mon Compte",
+      "profiles": "Profils",
+      "settings": "Préférences"
+    }
+  },
+  "creator": {
+    "speech": {
+      "tapToStart": "Appuyez sur le microphone pour commencer",
+      "noSpeechDetected": "Aucune parole détectée. Veuillez réessayer."
+    },
+    "permissions": {
+      "title": "Autorisation requise",
+      "message": "Les autorisations du microphone et du haut-parleur sont requises pour la reconnaissance vocale. Veuillez les activer dans les paramètres de votre appareil."
+    },
+    "story": {
+      "mockText": "Ceci est l'histoire d'un petit grille-pain courageux."
+    },
+    "error": {
+      "apiCallFailed": "L'appel API a échoué"
+    },
+    "status": {
+      "processing": "Traitement en cours...",
+      "listening": "Écoute en cours... Parlez maintenant !"
+    },
+    "credits": {
+      "freeStories_one": "{{count}} histoire gratuite restante",
+      "freeStories_other": "{{count}} histoires gratuites restantes"
+    },
+    "transcription": {
+      "label": "Vous avez dit :"
+    },
+    "stories": {
+      "buyNew": "Acheter de nouvelles histoires"
+    },
+    "dashboard": {
+      "notifications": {
+        "title": "Notifications"
+      },
+      "account": {
+        "title": "Compte",
+        "profiles": {
+          "title": "Profils"
+        },
+        "settings": {
+          "title": "Paramètres"
+        }
+      }
+    },
+    "settings": {
+      "title": "Préférences",
+      "language": {
+        "title": "Langue",
+        "select": "Sélectionner la langue"
+      },
+      "age": {
+        "title": "Tranche d'âge",
+        "ranges": {
+          "under-3": "< 3 ans",
+          "3-5": "3-5 ans",
+          "6-9": "6-9 ans",
+          "10-15": "10-15 ans",
+          "16-plus": "> 16 ans"
+        }
+      },
+      "errors": {
+        "selectAge": "Veuillez sélectionner une tranche d'âge",
+        "selectLanguage": "Veuillez sélectionner votre langue préférée",
+        "saveFailed": "Échec de l'enregistrement des paramètres"
+      }
+    }
+  }
 }

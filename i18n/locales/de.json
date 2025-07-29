@@ -1,3 +1,86 @@
 {
-  
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "loading": "Wird geladen...",
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "logout": "Abmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "upgrade": "Auf Premium upgraden",
+    "confirm": "Bestätigen",
+    "retry": "Erneut versuchen",
+    "settings": "Einstellungen",
+    "processing": "Wird verarbeitet..."
+  },
+  "creator": {
+    "speech": {
+      "tapToStart": "Tippen Sie auf das Mikrofon, um zu beginnen",
+      "noSpeechDetected": "Keine Sprache erkannt. Bitte versuchen Sie es erneut."
+    },
+    "permissions": {
+      "title": "Berechtigung erforderlich",
+      "message": "Mikrofon- und Lautsprecher-Berechtigungen sind für die Spracherkennung erforderlich. Bitte aktivieren Sie diese in Ihren Geräteeinstellungen."
+    },
+    "story": {
+      "mockText": "Das ist die Geschichte eines mutigen kleinen Toasters."
+    },
+    "error": {
+      "apiCallFailed": "API-Aufruf fehlgeschlagen"
+    },
+    "status": {
+      "processing": "Wird verarbeitet...",
+      "listening": "Hört zu... Sprechen Sie jetzt!"
+    },
+    "credits": {
+      "freeStories_one": "{{count}} weitere kostenlose Geschichte",
+      "freeStories_other": "{{count}} weitere kostenlose Geschichten"
+    },
+    "transcription": {
+      "label": "Sie sagten:"
+    },
+    "stories": {
+      "buyNew": "Neue Geschichten kaufen"
+    },
+    "dashboard": {
+      "notifications": {
+        "title": "Benachrichtigungen"
+      },
+      "account": {
+        "title": "Konto",
+        "profiles": {
+          "title": "Profile"
+        },
+        "settings": {
+          "title": "Einstellungen"
+        }
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "language": {
+        "title": "Sprache",
+        "select": "Sprache auswählen"
+      },
+      "age": {
+        "title": "Altersgruppe",
+        "ranges": {
+          "under-3": "< 3 Jahre",
+          "3-5": "3-5 Jahre",
+          "6-9": "6-9 Jahre",
+          "10-15": "10-15 Jahre",
+          "16-plus": "> 16 Jahre"
+        }
+      },
+      "errors": {
+        "selectAge": "Bitte wählen Sie eine Altersgruppe aus",
+        "selectLanguage": "Bitte wählen Sie Ihre bevorzugte Sprache aus",
+        "saveFailed": "Speichern der Einstellungen fehlgeschlagen"
+      }
+    }
+  }
 }

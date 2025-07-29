@@ -1,9 +1,11 @@
 import HeaderAccountButton from "@/components/ui/HeaderAccountButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 export default function TabLayout() {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <HeaderAccountButton visible={true} />
@@ -22,7 +24,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Tell Me",
+            title: t("tab.create"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={28} name="microphone" color={color} />
             ),
@@ -31,7 +33,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="stories"
           options={{
-            title: "My Stories",
+            title: t("tab.stories"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={28} name="book" color={color} />
             ),

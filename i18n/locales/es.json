@@ -1,3 +1,86 @@
 {
-  
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "error": "Error",
+    "success": "Éxito",
+    "loading": "Cargando...",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "upgrade": "Actualizar a Premium",
+    "confirm": "Confirmar",
+    "retry": "Intentar de nuevo",
+    "settings": "Preferencias",
+    "processing": "Procesando..."
+  },
+  "creator": {
+    "speech": {
+      "tapToStart": "Toca el micrófono para comenzar",
+      "noSpeechDetected": "No se detectó voz. Por favor, inténtalo de nuevo."
+    },
+    "permissions": {
+      "title": "Permiso requerido",
+      "message": "Se requieren permisos de micrófono y altavoz para el reconocimiento de voz. Por favor, actívalos en la configuración de tu dispositivo."
+    },
+    "story": {
+      "mockText": "Esta es la historia de una pequeña tostadora valiente."
+    },
+    "error": {
+      "apiCallFailed": "La llamada a la API falló"
+    },
+    "status": {
+      "processing": "Procesando...",
+      "listening": "Escuchando... ¡Habla ahora!"
+    },
+    "credits": {
+      "freeStories_one": "{{count}} historia gratuita más",
+      "freeStories_other": "{{count}} historias gratuitas más"
+    },
+    "transcription": {
+      "label": "Dijiste:"
+    },
+    "stories": {
+      "buyNew": "Comprar nuevas historias"
+    },
+    "dashboard": {
+      "notifications": {
+        "title": "Notificaciones"
+      },
+      "account": {
+        "title": "Cuenta",
+        "profiles": {
+          "title": "Perfiles"
+        },
+        "settings": {
+          "title": "Configuración"
+        }
+      }
+    },
+    "settings": {
+      "title": "Preferencias",
+      "language": {
+        "title": "Idioma",
+        "select": "Seleccionar idioma"
+      },
+      "age": {
+        "title": "Rango de edad",
+        "ranges": {
+          "under-3": "< 3 años",
+          "3-5": "3-5 años",
+          "6-9": "6-9 años",
+          "10-15": "10-15 años",
+          "16-plus": "> 16 años"
+        }
+      },
+      "errors": {
+        "selectAge": "Por favor selecciona un rango de edad",
+        "selectLanguage": "Por favor selecciona tu idioma preferido",
+        "saveFailed": "Error al guardar la configuración"
+      }
+    }
+  }
 }

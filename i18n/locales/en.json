@@ -17,6 +17,15 @@
     "settings": "Preferences",
     "processing": "Processing..."
   },
+  "tab": {
+    "create": "Tell Me",
+    "stories": "My Stories",
+    "account":  {
+      "home": "My Account",
+      "profiles": "Profiles",
+      "settings": "Preferences"
+    }
+  },
   "creator": {
     "speech": {
       "tapToStart": "Tap the microphone to start",

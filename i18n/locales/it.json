@@ -1,3 +1,86 @@
 {
-  
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "error": "Errore",
+    "success": "Successo",
+    "loading": "Caricamento...",
+    "login": "Accedi",
+    "signup": "Registrati",
+    "logout": "Disconnetti",
+    "email": "Email",
+    "password": "Password",
+    "upgrade": "Passa a Premium",
+    "confirm": "Conferma",
+    "retry": "Riprova",
+    "settings": "Preferenze",
+    "processing": "Elaborazione..."
+  },
+  "creator": {
+    "speech": {
+      "tapToStart": "Tocca il microfono per iniziare",
+      "noSpeechDetected": "Nessun parlato rilevato. Riprova."
+    },
+    "permissions": {
+      "title": "Autorizzazione richiesta",
+      "message": "Le autorizzazioni per microfono e altoparlante sono necessarie per il riconoscimento vocale. Attivale nelle impostazioni del dispositivo."
+    },
+    "story": {
+      "mockText": "Questa è la storia di un piccolo tostapane coraggioso."
+    },
+    "error": {
+      "apiCallFailed": "Chiamata API fallita"
+    },
+    "status": {
+      "processing": "Elaborazione...",
+      "listening": "In ascolto... Parla ora!"
+    },
+    "credits": {
+      "freeStories_one": "{{count}} storia gratuita rimanente",
+      "freeStories_other": "{{count}} storie gratuite rimanenti"
+    },
+    "transcription": {
+      "label": "Hai detto:"
+    },
+    "stories": {
+      "buyNew": "Acquista nuove storie"
+    },
+    "dashboard": {
+      "notifications": {
+        "title": "Notifiche"
+      },
+      "account": {
+        "title": "Account",
+        "profiles": {
+          "title": "Profili"
+        },
+        "settings": {
+          "title": "Impostazioni"
+        }
+      }
+    },
+    "settings": {
+      "title": "Preferenze",
+      "language": {
+        "title": "Lingua",
+        "select": "Seleziona lingua"
+      },
+      "age": {
+        "title": "Fascia d'età",
+        "ranges": {
+          "under-3": "< 3 anni",
+          "3-5": "3-5 anni",
+          "6-9": "6-9 anni",
+          "10-15": "10-15 anni",
+          "16-plus": "> 16 anni"
+        }
+      },
+      "errors": {
+        "selectAge": "Seleziona una fascia d'età",
+        "selectLanguage": "Seleziona la tua lingua preferita",
+        "saveFailed": "Salvataggio delle impostazioni fallito"
+      }
+    }
+  }
 }

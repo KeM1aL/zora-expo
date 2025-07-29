@@ -1,8 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { Pressable } from "react-native";
 
 export default function AccountTabLayout() {
+  const { t, i18n } = useTranslation();
+  
   return (
       <Tabs
         screenOptions={{
@@ -13,17 +16,8 @@ export default function AccountTabLayout() {
           tabBarLabelStyle: {
             paddingBottom: 20, // Add padding to ensure text is not cut off
           },
-          tabBarHideOnKeyboard: true, // Hide tab bar when keyboard is open
-        }}
-      >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: "Account Home",
-            tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="home" color={color} />
-            ),
-            headerRight: () => (
+          tabBarHideOnKeyboard: true, // Hide tab bar when keyboard is open,
+          headerRight: () => (
               <Link href="../" asChild>
                 <Pressable>
                   {({ pressed }) => (
@@ -37,12 +31,21 @@ export default function AccountTabLayout() {
                 </Pressable>
               </Link>
             ),
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: t("tab.account.home"),
+            tabBarIcon: ({ color }) => (
+              <FontAwesome size={28} name="home" color={color} />
+            )
           }}
         />
         <Tabs.Screen
           name="profiles"
           options={{
-            title: "Profiles",
+            title: t("tab.account.profiles"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={28} name="users" color={color} />
             ),
@@ -51,7 +54,7 @@ export default function AccountTabLayout() {
         <Tabs.Screen
           name="settings"
           options={{
-            title: "Settings",
+            title: t("tab.account.settings"),
             tabBarIcon: ({ color }) => (
               <FontAwesome size={28} name="cog" color={color} />
             ),
