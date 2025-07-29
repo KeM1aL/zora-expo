@@ -1,132 +1,116 @@
-import { AgeRange } from '@/constants/Settings';
-import { changeLanguage, getStoredLanguage, SupportedLanguage } from '@/i18n';
-import { getStoredAge, storeAge } from '@/lib/settings';
-import { supabase } from '@/lib/supabase/client';
-import { Session } from '@supabase/supabase-js';
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { AgeRange } from '../constants/Settings';
+import { supabase } from '../lib/supabase/client';
+import { useSettingsStore } from '../store/useSettingsStore';
+import { AuthContext } from './AuthContext';
 
-// Define the shape of the user data
-interface User {
-  id: string;
+interface UserProfile {
   email: string;
-  // Add other user properties as needed
+  name: string;
+  credits: number;
+  membership_plan: string;
+  last_purchase_date: string | null;
+  next_purchase_date: string | null;
 }
 
-// Define the shape of the context value
+interface UserPreferences {
+  age: AgeRange | null;
+  language: string | null;
+}
+
 interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  session: Session | null;
+  preferences: UserPreferences;
+  profile: UserProfile | null;
   isLoading: boolean;
-  language: SupportedLanguage | null;
-  ageRange: AgeRange | null;
-  setLanguage: (language: SupportedLanguage) => Promise<void>;
-  setAgeRange: (ageRange: AgeRange) => Promise<void>;
-  isSettingsLoading: boolean;
+  error: string | null;
+  reloadProfile: () => Promise<void>;
 }
 
-// Create the User Context
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Create the User Provider component
-interface UserProviderProps {
-  children: ReactNode;
-  initialUser?: User | null; // Add initialUser prop
-}
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const { session, isLoading: isAuthLoading } = useContext(AuthContext)!;
+  const { age, language } = useSettingsStore();
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUser = null }) => {
-  const [user, setUser] = useState<User | null>(initialUser); // Initialize with initialUser
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [language, setLanguageState] = useState<SupportedLanguage | null>(null);
-  const [ageRange, setAgeRangeState] = useState<AgeRange | null>(null);
-  const [isSettingsLoading, setIsSettingsLoading] = useState<boolean>(true);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load settings on mount
-  useEffect(() => {
-    const loadSettings = async () => {
-      setIsSettingsLoading(true);
-      try {
-        const [storedLanguage, storedAge] = await Promise.all([
-          getStoredLanguage(),
-          getStoredAge()
-        ]);
-        setLanguageState(storedLanguage);
-        setAgeRangeState(storedAge);
-      } catch (error) {
-        console.error('Error loading settings:', error);
-      } finally {
-        setIsSettingsLoading(false);
-      }
-    };
+  const preferences: UserPreferences = {
+    age: age,
+    language: language,
+  };
 
-    loadSettings();
-  }, []);
-
-  // Handle authentication state
-  useEffect(() => {
-    setIsLoading(true);
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user as User ?? null);
+  const fetchProfile = useCallback(async () => {
+    if (!session?.user?.id) {
+      setProfile(null);
       setIsLoading(false);
-    });
+      return;
+    }
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user as User ?? null);
-        setIsLoading(false);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { data, error: profileError } = await supabase
+        .from('profiles')
+        .select('email, name, credits, membership_plan, last_purchase_date, next_purchase_date')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profileError) {
+        throw profileError;
       }
-    );
 
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, []);
-
-  // Language setter function
-  const setLanguage = async (newLanguage: SupportedLanguage) => {
-    try {
-      await changeLanguage(newLanguage);
-      setLanguageState(newLanguage);
-    } catch (error) {
-      console.error('Error setting language:', error);
-      throw error;
+      if (data) {
+        setProfile({
+          email: data.email || '',
+          name: data.name || '',
+          credits: data.credits || 0,
+          membership_plan: data.membership_plan || 'free',
+          last_purchase_date: data.last_purchase_date,
+          next_purchase_date: data.next_purchase_date,
+        });
+      } else {
+        setProfile(null);
+      }
+    } catch (err: any) {
+      console.error('Error fetching user profile:', err.message);
+      setError(err.message || 'Failed to load user profile.');
+      setProfile(null);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [session?.user?.id]);
 
-  // Age range setter function
-  const setAgeRange = async (newAgeRange: AgeRange) => {
-    try {
-      await storeAge(newAgeRange);
-      setAgeRangeState(newAgeRange);
-    } catch (error) {
-      console.error('Error setting age range:', error);
-      throw error;
+  useEffect(() => {
+    if (!isAuthLoading) {
+      fetchProfile();
     }
-  };
+  }, [session?.user?.id, isAuthLoading, fetchProfile]);
 
-  const contextValue: UserContextType = {
-    user,
-    setUser,
-    session,
+  const reloadProfile = useCallback(async () => {
+    await fetchProfile();
+  }, [fetchProfile]);
+
+  const value = {
+    preferences,
+    profile,
     isLoading,
-    language,
-    ageRange,
-    setLanguage,
-    setAgeRange,
-    isSettingsLoading
+    error,
+    reloadProfile,
   };
 
-  return (
-    <UserContext.Provider value={contextValue}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-// Custom hook to use the User Context
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {

@@ -6,10 +6,9 @@ import {
   type SupportedLanguage,
 } from "@/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   FadeInDown,
   ZoomIn,
@@ -38,7 +37,12 @@ const languageAnimals: Record<string, string> = {
   "ar-SA": "🐪", // Camel
 };
 
-export function LanguageSwitcher() {
+interface LanguageModalProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+export function LanguageModal({ visible, onClose }: LanguageModalProps) {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language as SupportedLanguage;
 
@@ -50,114 +54,122 @@ export function LanguageSwitcher() {
     }
   };
 
-  const router = useRouter();
-  const handleClose = () => {
-    if(router.canDismiss()) {
-      router.dismiss();
-    } else {
-      router.push("/");
-    }
-  };
-
   const confirmLanguage = async () => {
     const storedLanguage = await getStoredLanguage();
     if (!storedLanguage && !currentLanguage) {
-      Alert.alert(t("settings.language.missing.title"), t("settings.language.missing.message"), [
-        {
-          text: t("common.cancel"),
-          style: "cancel",
-        },
-      ]);
+      Alert.alert(
+        t("settings.language.missing.title"),
+        t("settings.language.missing.message"),
+        [
+          {
+            text: t("common.cancel"),
+            style: "cancel",
+          },
+        ]
+      );
       return;
     }
     if (!storedLanguage) {
       await handleLanguageChange(currentLanguage);
     }
-    handleClose();
+    onClose();
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.languageContainer}>
-        <View style={styles.languageGrid}>
-          {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang], index) => {
-            const isSelected = code === currentLanguage;
-            const scale = useSharedValue(1);
+    <Modal
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.container}>
+        <View style={styles.languageContainer}>
+          <View style={styles.languageGrid}>
+            {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang], index) => {
+              const isSelected = code === currentLanguage;
+              const scale = useSharedValue(1);
 
-            const animatedStyle = useAnimatedStyle(() => {
-              return {
-                transform: [{ scale: scale.value }],
-              };
-            });
+              const animatedStyle = useAnimatedStyle(() => {
+                return {
+                  transform: [{ scale: scale.value }],
+                };
+              });
 
-            return (
-              <Animated.View
-                key={code}
-                entering={ZoomIn.delay(index * 150).springify()}
-                style={[styles.languageButtonContainer, animatedStyle]}
-              >
-                <Pressable
-                  style={[
-                    styles.languageButton,
-                    isSelected && styles.selectedLanguage,
-                  ]}
-                  onPress={() =>
-                    handleLanguageChange(code as SupportedLanguage)
-                  }
-                  onPressIn={() => {
-                    scale.value = withSpring(0.9);
-                  }}
-                  onPressOut={() => {
-                    scale.value = withSpring(1.05, {}, () => {
-                      scale.value = withSpring(1);
-                    });
-                  }}
+              return (
+                <Animated.View
+                  key={code}
+                  entering={ZoomIn.delay(index * 150).springify()}
+                  style={[styles.languageButtonContainer, animatedStyle]}
                 >
-                  <Image
-                    source={{ uri: languageFlags[code] }}
-                    style={styles.flagImage}
-                    resizeMode="cover"
-                  />
-                  <Text
+                  <Pressable
                     style={[
-                      styles.languageName,
-                      isSelected && styles.selectedText,
+                      styles.languageButton,
+                      isSelected && styles.selectedLanguage,
                     ]}
+                    onPress={() =>
+                      handleLanguageChange(code as SupportedLanguage)
+                    }
+                    onPressIn={() => {
+                      scale.value = withSpring(0.9);
+                    }}
+                    onPressOut={() => {
+                      scale.value = withSpring(1.05, {}, () => {
+                        scale.value = withSpring(1);
+                      });
+                    }}
                   >
-                    {lang.native}
-                  </Text>
-
-                  {isSelected && (
-                    <Animated.View
-                      entering={FadeInDown.springify()}
-                      style={styles.animalContainer}
+                    <Image
+                      source={{ uri: languageFlags[code] }}
+                      style={styles.flagImage}
+                      resizeMode="cover"
+                    />
+                    <Text
+                      style={[
+                        styles.languageName,
+                        isSelected && styles.selectedText,
+                      ]}
                     >
-                      <Text style={styles.animalEmoji}>
-                        {languageAnimals[code]}
-                      </Text>
-                    </Animated.View>
-                  )}
+                      {lang.native}
+                    </Text>
 
-                  {isSelected && (
-                    <View style={styles.starBadge}>
-                      <Text style={styles.starText}>★</Text>
-                    </View>
-                  )}
-                </Pressable>
-              </Animated.View>
-            );
-          })}
+                    {isSelected && (
+                      <Animated.View
+                        entering={FadeInDown.springify()}
+                        style={styles.animalContainer}
+                      >
+                        <Text style={styles.animalEmoji}>
+                          {languageAnimals[code]}
+                        </Text>
+                      </Animated.View>
+                    )}
+
+                    {isSelected && (
+                      <View style={styles.starBadge}>
+                        <Text style={styles.starText}>★</Text>
+                      </View>
+                    )}
+                  </Pressable>
+                </Animated.View>
+              );
+            })}
+          </View>
+        </View>
+        <View style={styles.footerContainer}>
+          <Button
+            theme="primary"
+            label={t("common.confirm")}
+            onPress={confirmLanguage}
+            icon={
+              <FontAwesome
+                name="check"
+                size={18}
+                color="#25292e"
+                style={styles.buttonIcon}
+              />
+            }
+          />
         </View>
       </View>
-      <View style={styles.footerContainer}>
-        <Button
-          theme="primary"
-          label={t("common.confirm")}
-          onPress={confirmLanguage}
-          icon={<FontAwesome name="check" size={18} color="#25292e" style={styles.buttonIcon} />}
-        />
-      </View>
-    </View>
+    </Modal>
   );
 }
 

@@ -1,11 +1,19 @@
+import AccountScreen from "@/components/account/AccountScreen";
+import { LoginScreen } from "@/components/account/LoginScreen";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function AccountTab() {
+  const { isAuthenticated, isLoading, user, isAnonymous } = useAuth();
   const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text>{t('account.title')}</Text>
+      {!isAuthenticated || isAnonymous ? (
+        <LoginScreen />
+      ) : (
+        <AccountScreen />
+      )}
     </View>
   );
 }

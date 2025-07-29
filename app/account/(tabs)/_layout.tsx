@@ -24,7 +24,6 @@ export default function AccountTabLayout() {
                     <FontAwesome
                       name="close"
                       size={25}
-                      color="blue"
                       style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                     />
                   )}

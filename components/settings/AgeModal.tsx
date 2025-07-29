@@ -5,7 +5,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   FadeInDown,
   useAnimatedStyle,
@@ -55,7 +55,12 @@ const AGE_RANGES: { value: AgeRange; label: string }[] = [
   { value: "16-plus", label: "settings.age.ranges.16-plus" },
 ];
 
-export function AgeSwitcher() {
+interface AgeModalProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+export function AgeModal({ visible, onClose }: AgeModalProps) {
   const { t } = useTranslation();
   const [selectedAge, setSelectedAge] = useState<AgeRange | null>(null);
   const router = useRouter();
@@ -70,11 +75,7 @@ export function AgeSwitcher() {
   };
 
   const handleClose = () => {
-    if (router.canDismiss()) {
-      router.dismiss();
-    } else {
-      router.push("/");
-    }
+    onClose();
   };
 
   const confirmAge = async () => {
@@ -95,87 +96,98 @@ export function AgeSwitcher() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.ageContainer}>
-        <View style={styles.ageGrid}>
-          {Object.entries(AGE_RANGES).map(([value, range], index) => {
-            const isSelected = range.value === selectedAge;
-            const ageInfo = ageIcons[range.value];
-            const scale = useSharedValue(1);
+    <Modal
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.container}>
+        <View style={styles.ageContainer}>
+          <View style={styles.ageGrid}>
+            {Object.entries(AGE_RANGES).map(([value, range], index) => {
+              const isSelected = range.value === selectedAge;
+              const ageInfo = ageIcons[range.value];
+              const scale = useSharedValue(1);
 
-            const animatedStyle = useAnimatedStyle(() => {
-              return {
-                transform: [{ scale: scale.value }],
-              };
-            });
+              const animatedStyle = useAnimatedStyle(() => {
+                return {
+                  transform: [{ scale: scale.value }],
+                };
+              });
 
-            return (
-              <Animated.View
-                key={value}
-                entering={ZoomIn.delay(index * 150).springify()}
-                style={[styles.ageButtonContainer, animatedStyle]}
-              >
-                <Pressable
-                  style={[
-                    styles.ageButton,
-                    isSelected && styles.selectedAge,
-                    { backgroundColor: isSelected ? ageInfo.color : "#F8F8F8" },
-                  ]}
-                  onPress={() => handleAgeChange(range.value as AgeRange)}
-                  onPressIn={() => {
-                    scale.value = withSpring(0.9);
-                  }}
-                  onPressOut={() => {
-                    scale.value = withSpring(1.05, {}, () => {
-                      scale.value = withSpring(1);
-                    });
-                  }}
+              return (
+                <Animated.View
+                  key={value}
+                  entering={ZoomIn.delay(index * 150).springify()}
+                  style={[styles.ageButtonContainer, animatedStyle]}
                 >
-                  <Text style={styles.ageEmoji}>{ageInfo.icon}</Text>
-                  <Text
-                    style={[styles.ageName, isSelected && styles.selectedText]}
+                  <Pressable
+                    style={[
+                      styles.ageButton,
+                      isSelected && styles.selectedAge,
+                      {
+                        backgroundColor: isSelected ? ageInfo.color : "#F8F8F8",
+                      },
+                    ]}
+                    onPress={() => handleAgeChange(range.value as AgeRange)}
+                    onPressIn={() => {
+                      scale.value = withSpring(0.9);
+                    }}
+                    onPressOut={() => {
+                      scale.value = withSpring(1.05, {}, () => {
+                        scale.value = withSpring(1);
+                      });
+                    }}
                   >
-                    {t(range.label)}
-                  </Text>
-
-                  {isSelected && (
-                    <Animated.View
-                      entering={FadeInDown.springify()}
-                      style={styles.animalContainer}
+                    <Text style={styles.ageEmoji}>{ageInfo.icon}</Text>
+                    <Text
+                      style={[
+                        styles.ageName,
+                        isSelected && styles.selectedText,
+                      ]}
                     >
-                      <Text style={styles.animalEmoji}>
-                        {ageAnimals[value]}
-                      </Text>
-                    </Animated.View>
-                  )}
+                      {t(range.label)}
+                    </Text>
 
-                  {isSelected && (
-                    <View style={styles.starBadge}>
-                      <Text style={styles.starText}>★</Text>
-                    </View>
-                  )}
-                </Pressable>
-              </Animated.View>
-            );
-          })}
+                    {isSelected && (
+                      <Animated.View
+                        entering={FadeInDown.springify()}
+                        style={styles.animalContainer}
+                      >
+                        <Text style={styles.animalEmoji}>
+                          {ageAnimals[value]}
+                        </Text>
+                      </Animated.View>
+                    )}
+
+                    {isSelected && (
+                      <View style={styles.starBadge}>
+                        <Text style={styles.starText}>★</Text>
+                      </View>
+                    )}
+                  </Pressable>
+                </Animated.View>
+              );
+            })}
+          </View>
+        </View>
+        <View style={styles.footerContainer}>
+          <Button
+            theme="primary"
+            label={t("common.confirm")}
+            onPress={confirmAge}
+            icon={
+              <FontAwesome
+                name="check"
+                size={18}
+                color="#25292e"
+                style={styles.buttonIcon}
+              />
+            }
+          />
         </View>
       </View>
-      <View style={styles.footerContainer}>
-        <Button
-          theme="primary"
-          label={t("common.confirm")}
-          onPress={confirmAge}
-          icon={
-            <FontAwesome
-              name="check"
-              size={18}
-              color="#25292e"
-              style={styles.buttonIcon}
-            />
-          }
-        />
-      </View>
-    </View>
+    </Modal>
   );
 }
 

@@ -1,10 +1,13 @@
-import { UserProvider, useUser } from "@/context/UserContext";
+import { AgeModal } from "@/components/settings/AgeModal";
+import { LanguageModal } from "@/components/settings/LanguageModal";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { UserProvider } from "@/context/UserContext";
 import { initializeI18n } from "@/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Font from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 
@@ -15,11 +18,12 @@ export const unstable_settings = {
 };
 
 function AppInitializer() {
-  const router = useRouter();
+  const { isLoading: isAuthLoading } = useAuth();
   const [appIsReady, setAppIsReady] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [selectedAge, setSelectedAge] = useState<string | null>(null);
-  const { isLoading: isUserLoading } = useUser();
+  const [showAgeModal, setShowAgeModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   useEffect(() => {
     async function prepare() {
@@ -56,57 +60,61 @@ function AppInitializer() {
   }, []);
 
   useEffect(() => {
-    if (appIsReady && !isUserLoading) {
+    if (appIsReady) {
       SplashScreen.hide();
       if (!selectedLanguage) {
-        router.push("/settings/language", { withAnchor: true });
+        setShowLanguageModal(true);
       } else if (!selectedAge) {
-        router.push("/settings/age", { withAnchor: true });
+        setShowAgeModal(true);
       }
     }
-  }, [appIsReady, isUserLoading]);
+  }, [appIsReady]);
 
-  if (!appIsReady || isUserLoading) {
+  const handleCloseLanguageModal = () => {
+    setShowLanguageModal(false);
+    if (!selectedAge) {
+      setShowAgeModal(true);
+    }
+  };
+
+  const handleCloseAgeModal = () => {
+    setShowAgeModal(false);
+  };
+
+  if (!appIsReady) {
     return null;
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="account"
-        options={{ headerShown: false, title: "Administration" }}
+    <>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="account"
+          options={{ headerShown: false, title: "Account" }}
+        />
+        <Stack.Screen
+          name="dashboard/notifications"
+          options={{ headerShown: false }}
+        />
+      </Stack>
+      <LanguageModal
+        visible={showLanguageModal}
+        onClose={handleCloseLanguageModal}
       />
-      <Stack.Screen
-        name="settings/language"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="settings/age"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="dashboard/notifications"
-        options={{ headerShown: false }}
-      />
-    </Stack>
+      <AgeModal visible={showAgeModal} onClose={handleCloseAgeModal} />
+    </>
   );
 }
-
 const queryClient = new QueryClient();
-
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <AuthProvider>
       <UserProvider>
-        <AppInitializer />
+        <QueryClientProvider client={queryClient}>
+          <AppInitializer />
+        </QueryClientProvider>
       </UserProvider>
-    </QueryClientProvider>
+    </AuthProvider>
   );
 }

@@ -70,6 +70,24 @@
       "title": "Settings"
     }
   },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "continueWithGoogle": "Continue with Google",
+    "continueAsGuest": "Continue as Guest",
+    "needAccount": "Need an account? Sign up",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "errorTitle": "Authentication Error",
+    "validationError": "Validation Error",
+    "provideCredentials": "Please provide both email and password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "accountUpgradeError": "Failed to upgrade your account. Please try again.",
+    "signOutError": "Failed to sign out. Please try again."
+  },
   "settings": {
     "title": "Preferences",
     "language": {

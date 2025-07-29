@@ -22,7 +22,7 @@
     "stories": "Mes Histoires",
     "account":  {
       "home": "Mon Compte",
-      "profiles": "Profils",
+      "profiles": "Utilisateurs",
       "settings": "Préférences"
     }
   },
