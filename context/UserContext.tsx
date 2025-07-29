@@ -92,9 +92,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (!isAuthLoading) {
+      if (!session) {
+        // Clear user context on sign out
+        setProfile(null);
+        setError(null);
+        setIsLoading(false);
+        return;
+      }
       fetchProfile();
     }
-  }, [session?.user?.id, isAuthLoading, fetchProfile]);
+  }, [session, isAuthLoading, fetchProfile]);
 
   const reloadProfile = useCallback(async () => {
     await fetchProfile();
